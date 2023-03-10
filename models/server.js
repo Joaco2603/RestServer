@@ -1,5 +1,4 @@
 const express = require('express')
-const path = require('path');
 
 
 class Server{
@@ -23,8 +22,34 @@ class Server{
         // };
 
 
-        this.app.get('/',(req,res)=>{
-            res.sendFile("C:\\Users\\JOAQUIN\\Desktop\\Curso node js\\8-RESTserver\\public\\index.html");
+        // this.app.get('/',(req,res)=>{
+        //     res.sendFile("C:\\Users\\JOAQUIN\\Desktop\\Curso node js\\8-RESTserver\\public\\index.html");
+        // })
+
+        this.app.get('/api',(req,res)=>{
+            res.json({
+                msg: 'get API'
+            })
+        })
+        this.app.put('/api',(req,res)=>{
+            res.json({
+                msg: 'put API'
+            })
+        })
+        this.app.post('/api',(req,res)=>{
+            res.json({
+                msg: 'post API'
+            })
+        })
+        this.app.delete('/api',(req,res)=>{
+            res.json({
+                msg: 'delete API'
+            })
+        })
+        this.app.patch('/api',(req,res)=>{
+            res.json({
+                msg: 'patch API'
+            })
         })
     }
 
