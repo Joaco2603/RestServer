@@ -1,5 +1,7 @@
 
 const { response, request } = require('express');
+const Usuario = require('../models/user');
+const encriptado = require('bcryptjs');
 
 
 const usuarioGet = (req = request,res = response)=>{
@@ -24,14 +26,17 @@ const usuarioPut = (req,res = response)=>{
     })
 }
 
-const usuarioPost = (req,res = response)=>{
+const usuarioPost = async(req,res = response)=>{
 
-    const {nombre, edad} = req.body;
+    // const {nombre, edad} = req.body;
+    // const {nombre, ...resto} = req.body;
+    const { nombre,correo,password,rol} = req.body;
+    const usuario = new Usuario( {nombre,correo,password,rol} );
+    await usuario.save();
 
     res.json({
         msg: 'post controller',
-        nombre,
-        edad
+        usuario
     })
 }
 
