@@ -6,7 +6,7 @@ class Server{
     constructor(){
         this.app = express();
         this.port = process.env.PORT || 8080;
-        this.usuariosPath = '/api/users'
+        this.crearUsuariosPath = '/api/crear'
 
         //Conectar a base de datos
         this.conectarDB()
@@ -38,7 +38,11 @@ class Server{
     routes(){
         
         
-        this.app.use(this.usuariosPath,require('../routes/user'))
+        this.app.use(this.crearUsuariosPath,require('../routes/user'))
+
+
+
+
         
         // let options = {
         //     root: path.join(__dirname)

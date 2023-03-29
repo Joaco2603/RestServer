@@ -2,27 +2,49 @@
 const { response, request } = require('express');
 const Usuario = require('../models/user');
 const bcryptjs = require('bcryptjs');
+const { verificarEmail } = require('../helpers/db-validators');
 
 
-const usuarioGet = (req = request,res = response)=>{
+const usuarioGet = async(req = request,res = response)=>{
 
-    const {q,nombre,apkey} = req.query;
+    // const {q,nombre,apkey,page = 1, limit} = req.query;
+    const { limite = 5, desde = 0 } = req.query; 
 
-    res.json({
-        msg: 'get controller',
-        q,nombre,apkey
-    })
+
+    const [total,usuarios] = await Promise.all([
+        Usuario.countDocuments({ estado: true }),
+        Usuario.find({ estado: true })
+        .skip(Number(desde))
+        .limit(Number(limite))
+    ])
+
+        res.json({
+            msg: 'get controller',
+            total,
+            usuarios
+            // resp
+        })
+    
 }
 
-const usuarioPut = (req,res = response)=>{
+const usuarioPut = async(req,res = response)=>{
 
     //const {id} = req.parmas
 
-    const id = req.params.id;
+    const {id} = req.params;
+    const {_id, password, google,correo, ...resto}=req.body
 
+    
+    if( password ){
+        //Hacer el hash de la contraseña o encriptarla
+        const salt = bcryptjs.genSaltSync(15);
+        resto.password = bcryptjs.hashSync( password ,salt )
+    }
+    const usuario = await Usuario.findByIdAndUpdate(id,resto);
+    
     res.json({
         msg: 'put controller',
-        id
+        usuario
     })
 }
 
@@ -32,15 +54,8 @@ const usuarioPost = async(req,res = response)=>{
     // const {nombre, ...resto} = req.body;
     const { nombre,correo,password,rol} = req.body;
     const usuario = new Usuario( {nombre,correo,password,rol} );
-
-    //Verificar si el correo ya existe
-
-    const existeEmail = await Usuario.findOne({correo});
-    if( existeEmail ){
-        return res.status(400).json({
-            err: "El correo ya esta registrado"
-        })
-    }
+    console.log(correo)
+    verificarEmail(correo);
 
     //Hacer el hash de la contraseña o encriptarla
     const salt = bcryptjs.genSaltSync(15);
@@ -57,8 +72,13 @@ const usuarioPost = async(req,res = response)=>{
 }
 
 const usuarioDelete = (req,res = response)=>{
+
+    const { id } = req.params;
+
+    
     res.json({
-        msg: 'delete controller'
+        msg: 'delete controller',
+        id
     })
 }
 
