@@ -11,6 +11,5 @@ const RoleSchema = Schema({
     }
 
 })
-console.log("Hola mundo")
 
 module.exports = model('Role', RoleSchema);

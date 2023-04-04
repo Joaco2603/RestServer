@@ -25,14 +25,14 @@ const verificarEmail = async(correo='')=>{
 //Verificar si el ID exite
 
 
-const existeUsuarioPorID = async(id ='')=>{
-    const existeID = await Usuario.findOne({id});
+const existeUsuarioPorID = async(id)=>{
+    const existeID = await Usuario.findById(id);
     if( !existeID ){
     // return res.status(400).json({
     //     err: "El correo ya esta registrado"
     // })
     throw new Error(`El id:${id} no existe`)
-}
+    }
 }
 
 
