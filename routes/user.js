@@ -8,7 +8,11 @@ const { usuarioGet,usuarioPut,usuarioPost,usuarioDelete, usuarioPatch } = requir
 const { esRoleValido,verificarEmail,existeUsuarioPorID } = require('../helpers/db-validators');
 
 
-const { validarCampos } = require('../middlewares/validar_campos');
+// const { validarCampos } = require('../middlewares/validar_campos');
+// const { validarJWT } = require('../middlewares/validar-jwt');
+// const { esAdmin,tieneRole } = require('../middlewares/validar-roles');
+
+const {validarCampos,validarJWT,esAdmin,tieneRole} = require('../middlewares/index')
 
 
 const router = Router();
@@ -40,6 +44,9 @@ router.post('/',[
 
 
 router.delete('/:id',[
+    validarJWT,
+    // esAdmin,
+    tieneRole('ADMIN_ROLE','VENTAS_ROLE'),
     check('id','No es un ID valido').isMongoId(),
     check('id').custom(existeUsuarioPorID),
     validarCampos
