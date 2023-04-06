@@ -37,7 +37,6 @@ const tieneRole = (...roles)=>{
                 msg:'Se requiere un rol valido'
             })
         }
-
         next();
     }
 }
