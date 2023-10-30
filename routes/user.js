@@ -35,7 +35,7 @@ router.put('/:id',[
 router.post('/',[
     check('nombre', "El nombre es obligatorio").not().isEmpty(),
     check('password', "Es obligatorio y debe tener 6 caracteres").isLength({min:6}),
-    // check('correo', "El correo no es valido").isEmail(),
+    check('correo', "El correo no es valido").isEmail(),
     check('correo').custom( verificarEmail ),
     // check('rol',"No es un rol permitido").isIn(['ADMIN_ROLE','USER_ROLE']),
     check('rol').custom( esRoleValido ),
@@ -58,6 +58,7 @@ router.patch('/',[
     check('id').custom(existeUsuarioPorID),
     validarCampos
 ],usuarioPatch)
+
 
 
 module.exports = router;

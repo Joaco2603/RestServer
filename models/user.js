@@ -1,12 +1,11 @@
 
 
 const {Schema, model}= require('mongoose');
-const { generarJWT } = require('../helpers/generarjwt');
 
 const UserSchema =Schema({
     nombre:{
         type:String,
-        require:[true,'El nombre es obligatorio']
+        required:[true,'El nombre es obligatorio']
     },
     correo:{
         type:String,

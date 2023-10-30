@@ -6,8 +6,13 @@ class Server{
     constructor(){
         this.app = express();
         this.port = process.env.PORT || 8080;
-        this.crearUsuariosPath = '/api/crear'
-        this.autPath = '/api/auth'
+        
+        this.path = {
+            auth :      '/api/auth',
+            usuarios :  '/api/crear',
+            categorias: '/api/categorias',
+            productos: '/api/productos'
+        }
 
         //Conectar a base de datos
         this.conectarDB()
@@ -34,17 +39,26 @@ class Server{
 
         //Directorio publico
         this.app.use( express.static('public') )
+
+         // Middleware de manejo de errores (debería ir al final de tus rutas o en tu archivo principal)
+         this.app.use((err, req, res, next) => {
+            console.error(err.stack);
+            res.status(500).send('Algo salió mal!');
+        });
+
     }
 
     routes(){
         
         
-        this.app.use(this.crearUsuariosPath,require('../routes/user'))
-
-        this.app.use(this.autPath,require('../routes/auth'))
-
-
+        this.app.use(this.path.auth,require('../routes/auth'));
         
+        this.app.use(this.path.categorias,require('../routes/categorias'));
+        
+        this.app.use(this.path.usuarios,require('../routes/user'));
+
+        this.app.use(this.path.productos,require('../routes/productos'));
+
         // let options = {
         //     root: path.join(__dirname)
         // };

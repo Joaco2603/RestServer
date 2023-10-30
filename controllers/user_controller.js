@@ -2,7 +2,6 @@
 const { response, request } = require('express');
 const Usuario = require('../models/user');
 const bcryptjs = require('bcryptjs');
-const { verificarEmail } = require('../helpers/db-validators');
 
 
 const usuarioGet = async(req = request,res = response)=>{
@@ -54,8 +53,6 @@ const usuarioPost = async(req,res = response)=>{
     // const {nombre, ...resto} = req.body;
     const { nombre,correo,password,rol} = req.body;
     const usuario = new Usuario( {nombre,correo,password,rol} );
-    console.log(correo)
-    verificarEmail(correo);
 
     //Hacer el hash de la contraseña o encriptarla
     const salt = bcryptjs.genSaltSync(15);
