@@ -2,9 +2,9 @@ const { Router } = require('express');
 const { check } = require('express-validator');
 
 
-const { obtenerProductos,crearProducto,productoDelete, productoPatch } = require('../controllers/productos.js');
-const { esRoleValido,verificarEmail,existeProducto,existeUsuarioPorID, existeProductoPorID } = require('../helpers/db-validators');
-const {validarCampos,validarJWT,esAdmin,tieneRole} = require('../middlewares/index')
+const { obtenerProductos,crearProducto,productoDelete, productoPut } = require('../controllers/productos.js');
+const { existeProducto, existeProductoPorID } = require('../helpers/db-validators');
+const {validarCampos,validarJWT,tieneRole} = require('../middlewares/index')
 
 
 const router = Router();
@@ -15,18 +15,17 @@ const router = Router();
 router.get('/',obtenerProductos)
 
 
-// router.put('/:id',[
-//     check('id','No es in ID valido').isMongoId(),
-//     check('id').custom(existeproductoPorID),
-//     check('rol').custom( esRoleValido ),
-//     validarCampos
-// ],productoPut)
+router.put('/:id',[
+    validarJWT,
+    check('id').custom( existeProductoPorID ),
+    validarCampos
+],productoPut)
 
 
 
 router.post('/',[
     validarJWT,
-    tieneRole('ADMIN_ROLE'),
+    check('ADMIN_ROLE').custom(tieneRole),
     check('nombre', "El nombre es obligatorio").not().isEmpty(),
     check('nombre').custom(existeProducto),
     check('usuario', "Es obligatorio el id del usuario").isMongoId(),

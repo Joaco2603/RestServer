@@ -59,17 +59,16 @@ const crearProducto = async(req = request, res = response)=>{
 }
 
 
-const actualizarProducto = async(req,res=response)=>{
+const productoPut = async(req,res=response)=>{
 
     const { id } = req.params;
     const { estado, usuario, ...data } = req.body;
 
-    data.nombre = data.nombre.toUpperCase();
     data.usuario = req.usuario._id;
 
-    const Producto = await Producto.findByIdAndUpdate(id,data,{new:true});
+    const producto = await Producto.findByIdAndUpdate(id,data,{new:true});
 
-    res.status(201).json(Producto);
+    res.status(201).json(producto);
 
 }
 
@@ -90,6 +89,6 @@ module.exports = {
     crearProducto,
     obtenerProductos,
     obtenerProductoPorID,
-    actualizarProducto,
+    productoPut,
     productoDelete
 }
