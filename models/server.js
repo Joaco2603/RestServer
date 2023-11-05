@@ -1,6 +1,7 @@
 const express = require('express');
 const Cors = require('cors');
-const {DBConnection} = require('../db/config')
+const {DBConnection} = require('../db/config');
+const fileUpload = require('express-fileupload');
 
 class Server{
     constructor(){
@@ -12,7 +13,8 @@ class Server{
             buscar:     '/api/buscar',
             categorias: '/api/categorias',
             usuarios :  '/api/crear',
-            productos: '/api/productos'
+            uploads :   '/api/uploads',
+            productos:  '/api/productos'
         }
 
         //Conectar a base de datos
@@ -36,10 +38,17 @@ class Server{
         this.app.use( Cors() )
 
         //Lectura y parseo del body
-        this.app.use( express.json() )
+        this.app.use( express.json() );
 
         //Directorio publico
-        this.app.use( express.static('public') )
+        this.app.use( express.static('public') );
+
+        //Carga de archivo
+        this.app.use(fileUpload({
+            limits: { fileSize: 50 * 1024 * 1024 },
+            useTempFiles : true,
+            tempFileDir : '/tmp/'
+        }));
 
          // Middleware de manejo de errores (debería ir al final de tus rutas o en tu archivo principal)
          this.app.use((err, req, res, next) => {
@@ -59,6 +68,8 @@ class Server{
         this.app.use(this.path.categorias,require('../routes/categorias'));
         
         this.app.use(this.path.usuarios,require('../routes/user'));
+
+        this.app.use(this.path.uploads,require('../routes/uploads'));
 
         this.app.use(this.path.productos,require('../routes/productos'));
 
