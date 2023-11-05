@@ -3,6 +3,7 @@ const Role = require('../models/role')
 const Usuario = require('../models/user');
 const Categoria = require('../models/categoria');
 const {Producto}  = require('../models');
+const Colecciones = require('../models');
 
 
 const esRoleValido = async(rol='') =>{
@@ -59,6 +60,26 @@ const existeProducto = async(nombre='')=>{
 }
 
 
+const existeColeccion = async(coleccion)=>
+{
+    
+    coleccion = coleccion[0].toUpperCase() + coleccion.slice(1);
+
+    const coleccionEncontrada = ColeccionesEntrantesPermitidas(coleccion);
+
+    if(!coleccionEncontrada){
+        throw new Error("Esta no es una coleccion valida")
+    }
+}
+
+const ColeccionesEntrantesPermitidas = (coleccion) =>
+{
+    const ColeccionesPermitidas = Object.keys(Colecciones);
+
+    if(ColeccionesPermitidas.includes(coleccion)) return true;
+}
+
+
 
 
 module.exports = {
@@ -67,5 +88,6 @@ module.exports = {
     existeUsuarioPorID,
     existeCategoria,
     existeProducto,
-    existeProductoPorID
+    existeProductoPorID,
+    existeColeccion
 }
