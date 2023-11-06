@@ -79,7 +79,16 @@ const ColeccionesEntrantesPermitidas = (coleccion) =>
     if(ColeccionesPermitidas.includes(coleccion)) return true;
 }
 
+const coleccionesPermitidas = (coleccion = '', colecciones = []) =>
+{
+    const incluida = colecciones.includes(coleccion);
+    if(!incluida)
+    {
+        throw new Error(`La coleccion ${coleccion} no es permitida, tiene que ser ${colecciones}`)
+    }
 
+    return true;
+}
 
 
 module.exports = {
@@ -89,5 +98,6 @@ module.exports = {
     existeCategoria,
     existeProducto,
     existeProductoPorID,
-    existeColeccion
+    existeColeccion,
+    coleccionesPermitidas
 }
