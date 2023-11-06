@@ -47,14 +47,15 @@ class Server{
         this.app.use(fileUpload({
             limits: { fileSize: 50 * 1024 * 1024 },
             useTempFiles : true,
-            tempFileDir : '/tmp/'
+            tempFileDir : '/tmp/',
+            createParentPath : true
         }));
 
          // Middleware de manejo de errores (debería ir al final de tus rutas o en tu archivo principal)
          this.app.use((err, req, res, next) => {
             console.error(err.stack);
             res.status(500).send('Algo salió mal!');
-        });
+        }); 
 
     }
 
